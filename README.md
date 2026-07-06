@@ -17,6 +17,8 @@ dashboard designed for an iPad (10.9", portrait) mounted in the dash.
 - Charge port side indicator
 - Service/diagnostics page with unit toggles and raw readings
 - Red bezel band styling to match the car's anodized gauge bezels
+- Captive-portal DNS + OS connectivity-check endpoints so tablets treat
+  the AP as "online" and reconnect to it automatically
 
 ## Hardware
 

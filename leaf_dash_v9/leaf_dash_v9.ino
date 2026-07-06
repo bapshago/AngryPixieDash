@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WebServer.h>
+#include <DNSServer.h>
 #include "driver/twai.h"
 #include "driverpage.h"
 #include "diagnosticpage.h"
@@ -18,6 +19,11 @@
 #define TIRE_CIRCUMFERENCE_M   1.975f
 
 WebServer server(80);
+
+// Captive-portal DNS: answer every lookup with our own IP so tablets
+// believe the AP has internet and stay connected automatically.
+DNSServer dnsServer;
+const byte DNS_PORT = 53;
 
 // Shared state updated by CAN receiver
 volatile int32_t g_voltage_V = 0;
@@ -313,6 +319,9 @@ void setup() {
     Serial.println("[WiFi] AP start FAILED");
   }
 
+  // Redirect all DNS requests to the ESP32 (captive portal style)
+  dnsServer.start(DNS_PORT, "*", WiFi.softAPIP());
+
   if (!twai_init()) {
     Serial.println("[TWAI] Init FAILED");
     while (true) { delay(1000); }
@@ -325,6 +334,23 @@ void setup() {
   server.on("/diagnostics", HTTP_GET, handleDiagnostics);
   server.on("/api/setunit", HTTP_POST, handleSetUnit);
   server.on("/api/settemp", HTTP_POST, handleSetTemp);
+
+  // Connectivity-check handlers so tablets don't flag "no internet"
+  server.on("/generate_204", HTTP_GET, []() {          // Android
+    server.send(204, "", "");
+  });
+  server.on("/gen_204", HTTP_GET, []() {               // Android (alt)
+    server.send(204, "", "");
+  });
+  server.on("/hotspot-detect.html", HTTP_GET, []() {   // Apple iOS/iPadOS
+    server.send(200, "text/html", "<HTML><HEAD><TITLE>Success</TITLE></HEAD><BODY>Success</BODY></HTML>");
+  });
+  server.on("/connecttest.txt", HTTP_GET, []() {       // Windows
+    server.send(200, "text/plain", "Microsoft Connect Test");
+  });
+  server.on("/ncsi.txt", HTTP_GET, []() {              // Windows (legacy)
+    server.send(200, "text/plain", "Microsoft NCSI");
+  });
 
   server.onNotFound([]() {
     server.send(404, "text/plain", "Not found");
@@ -341,6 +367,7 @@ void setup() {
 }
 
 void loop() {
+  dnsServer.processNextRequest();
   server.handleClient();
   delay(2);
 }
