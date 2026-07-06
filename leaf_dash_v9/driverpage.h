@@ -243,6 +243,7 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
   const gaugesmallDefs = [
     { label: "Voltage", id: "voltage",   unit: "V",   max: 450 },
     { label: "Current", id: "current",   unit: "A",   min: 150, max: -250,
+      size: 165, radius: 70,   // bigger dial, tighter box than the default 190/48
       greenZones: [[0, 0.375]], redZones: [[0.875, 1.0]] },
     { label: "12V Batt", id: "aux12v",   unit: "V",   min: 10, max: 16,
       redZones: [[0, 0.25], [0.8333, 1.0]] },   // <11.5 V and >15 V
@@ -546,12 +547,12 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
     // Speed – large gauge
     createGauge(document.getElementById("speedGauge"), gaugeDefs[0], false);
 
-    // Small gauges: Voltage + Current → left, 12V → middle,
+    // Small gauges: Voltage + 12V → left, Current → middle (larger),
     // Inv Temp + Motor Temp → right
     gaugesmallDefs.forEach(g => {
-      if (g.id === "voltage" || g.id === "current") {
+      if (g.id === "voltage" || g.id === "aux12v") {
         createGauge(left, g, true);
-      } else if (g.id === "aux12v") {
+      } else if (g.id === "current") {
         createGauge(mid, g, true);
       } else {
         const w = document.createElement("div");
