@@ -3,6 +3,8 @@ secrets.h
 
 # Build artifacts / packaged releases
 *.zip
+# ...except PCB fabrication files
+!hardware/Gerbers.zip
 
 # Loose reference images not needed to run the dashboard
 F198644560.png

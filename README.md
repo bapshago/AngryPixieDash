@@ -20,7 +20,8 @@ dashboard designed for an iPad (10.9", portrait) mounted in the dash.
 
 ## Hardware
 
-- ESP32 Uniboard, CAN (TWAI) at 500 kbit/s
+- Angry Pixie UniBoard (ESP32) — schematic, gerbers, BOM and pin map in [hardware/](hardware/)
+- CAN (TWAI) at 500 kbit/s
 - ZombieVerter VCU driving Nissan Leaf inverter, PDM (charger/DC-DC) and BMS
 - WiFi access point: SSID/password set in `secrets.h`, dashboard at `http://192.168.4.1/`
 
