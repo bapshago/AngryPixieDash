@@ -429,7 +429,9 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
     const offset = arcLen * (1 - pct);
     const color  = pct < 0.05 ? "#FF0000" : "#0096FF";
     if (arc) { arc.setAttribute("stroke-dashoffset", offset); arc.setAttribute("stroke", color); }
-    if (txt) txt.textContent = unit ? `${value ?? "--"} ${unit}` : `${value ?? "--"}`;
+    // Whole numbers only on the dash readouts
+    const disp = (value == null || isNaN(value)) ? "--" : Math.round(value);
+    if (txt) txt.textContent = unit ? `${disp} ${unit}` : `${disp}`;
     rotateNeedle(id, clamp, min, max);
   }
 
@@ -492,11 +494,11 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
       const fill = document.getElementById("chargeFill");
       fill.style.width           = `${soc}%`;
       fill.style.backgroundColor = soc < 15 ? "#FF0000" : "#00e040";
-      document.getElementById("chargeText").textContent = `${soc.toFixed(1)}%`;
+      document.getElementById("chargeText").textContent = `${Math.round(soc)}%`;
       const kwhRemaining = (soc / 100) * 22;
       const rangeVal = useMph
-        ? (kwhRemaining * 3.9).toFixed(1) + " mi"
-        : (kwhRemaining * 3.9 * 1.60934).toFixed(1) + " km";
+        ? Math.round(kwhRemaining * 3.9) + " mi"
+        : Math.round(kwhRemaining * 3.9 * 1.60934) + " km";
       document.getElementById("rangeText").textContent = "~" + rangeVal;
 
       // Estimated time to full charge – shown only while charging.
