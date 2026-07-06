@@ -1,0 +1,17 @@
+# Real WiFi credentials — use secrets.h.example as the template
+secrets.h
+
+# Build artifacts / packaged releases
+*.zip
+
+# Loose reference images not needed to run the dashboard
+F198644560.png
+K-Jetronic-Porsche-Crest-928-1978-1986-1.webp
+
+# Python
+__pycache__/
+*.pyc
+
+# OS cruft
+Thumbs.db
+.DS_Store
