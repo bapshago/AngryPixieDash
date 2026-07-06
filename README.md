@@ -36,7 +36,7 @@ dashboard designed for an iPad (10.9", portrait) mounted in the dash.
 | 0x390 | OBC / charge plug status                    |
 | 0x55B | State of charge                             |
 | 0x1DB | Battery current                             |
-| 0x31A | ZombieVerter: drive direction, op mode, and optional 12V aux voltage (map `uaux` → ID 0x31A, start bit 16, length 16, gain 10) |
+| 0x31A | ZombieVerter: drive direction, op mode, 12V aux voltage — requires custom TX mappings, see [ZombieVerter_CAN_Mappings.md](ZombieVerter_CAN_Mappings.md) |
 | 0x292 | 12V battery voltage (stock Leaf CAR-CAN, if present) |
 
 ## Flashing
