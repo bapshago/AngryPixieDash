@@ -81,6 +81,10 @@ def make_api_data():
         "charge_state":   round(soc, 1),
         "current_a":      round(current, 1),
         "aux_12v":        round(13.2 + 2.2 * math.sin(t / 1.1), 1),
+        "raw_31a":        "%02X %02X %02X %02X 00 00 00 00" % (
+                              drivedir & 0xFF, opmode_i,
+                              int((13.2 + 2.2 * math.sin(t / 1.1)) * 10) & 0xFF,
+                              (int((13.2 + 2.2 * math.sin(t / 1.1)) * 10) >> 8) & 0xFF),
         "drive_direction": drivedir,
         "op_mode":        OPMODE_TEXT[opmode_i],
         "vehicle_kph":    round(kph, 1),

@@ -486,7 +486,7 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
       // All small gauge values
       updateGauge("voltage",   data.voltage_v  ?? 0, 450, "V");
       updateGauge("current",   data.current_a  ?? 0, -250, "A");
-      updateGauge("aux12v",    data.aux_12v    ?? 0, 16, "V");
+      updateGauge("aux12v",    data.aux_12v, 16, "V");   // null → "--" until CAN data arrives
       updateGauge("invTemp",   invTempVal,   tempMax, tempUnit);
       updateGauge("motorTemp", motorTempVal, tempMax, tempUnit);
 

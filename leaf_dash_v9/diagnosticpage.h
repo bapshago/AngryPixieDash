@@ -82,6 +82,7 @@ const char DIAGNOSTICS_HTML[] PROGMEM = R"rawliteral(
   <div class="data-box">
     <div><span class="label">DC Bus Voltage:</span> <span id="voltage">--</span> V</div>
     <div><span class="label">12V Battery:</span> <span id="aux_12v">--</span> V</div>
+    <div><span class="label">ZombieVerter 0x31A raw:</span> <span id="raw31a" style="font-family:monospace;">--</span></div>
     <div><span class="label">Inverter Temp:</span> <span id="inv_temp">--</span></div>
     <div><span class="label">Motor Temp:</span> <span id="motor_temp">--</span></div>
     <div><span class="label">State of Charge:</span> <span id="stateofcharge" class="status">--</span></div>
@@ -127,6 +128,7 @@ const char DIAGNOSTICS_HTML[] PROGMEM = R"rawliteral(
 
         document.getElementById("voltage").textContent = data.voltage_v ?? '--';
         document.getElementById("aux_12v").textContent = data.aux_12v ?? '--';
+        document.getElementById("raw31a").textContent = data.raw_31a ?? 'no 0x31A frames received';
         document.getElementById("inv_temp").textContent = (invTemp ?? '--') + ' ' + tempUnit;
         document.getElementById("motor_temp").textContent = (motorTemp ?? '--') + ' ' + tempUnit;
         document.getElementById("stateofcharge").textContent = data.charge_state ?? '--';

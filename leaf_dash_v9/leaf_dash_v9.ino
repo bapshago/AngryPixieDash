@@ -39,6 +39,8 @@ volatile float   g_current = 0;
 volatile int32_t g_drivedir = 0;
 volatile int32_t g_opmode = 0;
 volatile float   g_aux_12v = NAN;   // 12V aux battery voltage
+volatile uint8_t g_31a_raw[8] = {0};  // last raw 0x31A frame, for diagnostics
+volatile uint8_t g_31a_dlc = 0;
 
 bool TEST_MODE = false; // sends test data for dev
 bool g_use_mph = false;
@@ -175,6 +177,12 @@ else if (id == 0x31A) {
     // in bytes 2-3 little-endian at 0.1 V/bit. Zero = not mapped.
     uint16_t raw12 = (uint16_t)bytes[2] | ((uint16_t)bytes[3] << 8);
     if (raw12 != 0) g_aux_12v = raw12 * 0.1f;
+
+    // Keep the raw frame around so diagnostics can show what
+    // ZombieVerter is actually sending
+    g_31a_dlc = msg.data_length_code;
+    for (int i = 0; i < 8; i++)
+      g_31a_raw[i] = (i < msg.data_length_code) ? bytes[i] : 0;
 }
 
       taskYIELD();
@@ -257,6 +265,18 @@ void handleApiData() {
   j += "\"charge_state\":" + String(stoc) + ",";
   j += "\"current_a\":" + String(cur) + ",";
   j += "\"aux_12v\":" + (isfinite(aux12) ? String(aux12, 1) : "null") + ",";
+
+  // Raw 0x31A frame as hex, for diagnosing the ZombieVerter uaux mapping
+  if (g_31a_dlc > 0) {
+    char rawbuf[32];
+    uint8_t raw[8];
+    for (int i = 0; i < 8; i++) raw[i] = g_31a_raw[i];
+    snprintf(rawbuf, sizeof(rawbuf), "%02X %02X %02X %02X %02X %02X %02X %02X",
+             raw[0], raw[1], raw[2], raw[3], raw[4], raw[5], raw[6], raw[7]);
+    j += "\"raw_31a\":\"" + String(rawbuf) + "\",";
+  } else {
+    j += "\"raw_31a\":null,";
+  }
   j += "\"drive_direction\":" + String(drivedir) + ",";
   j += "\"op_mode\":\"" + String(opmodeStatusText(opmode)) + "\"" + ",";
   
