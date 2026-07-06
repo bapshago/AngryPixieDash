@@ -47,6 +47,13 @@ dashboard designed for an iPad (10.9", portrait) mounted in the dash.
    package installed and upload. Set `TEST_MODE = true` to generate fake data
    without a CAN bus connected.
 
+## In-car display
+
+See [Tablet_Setup.md](Tablet_Setup.md) for configuring a Fire tablet to
+wake with ignition power and sleep when it's cut, and
+[ZombieVerter_CAN_Mappings.md](ZombieVerter_CAN_Mappings.md) for the CAN
+TX mappings the dash depends on.
+
 ## Previewing the web pages without hardware
 
 ```
