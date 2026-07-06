@@ -185,9 +185,8 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
       <div id="midColumn"></div>
       <div id="rightColumn"></div>
     </div>
-  </div>
 
-  <div class="controls-row">
+    <div class="controls-row">
     <div id="opmodeIcon" class="opmode-icon">❓</div>
     <div id="driveDirection" class="drive-direction">
       <span id="dirR">R</span>
@@ -216,6 +215,7 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
       </div>
     </div>
   </div>
+  </div><!-- /gauge-cluster -->
 
   <div class="status-box">
     <div class="row"><span class="lbl">Plug</span><span class="val" id="plug">--</span></div>
